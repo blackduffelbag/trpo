@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>add_concert</class>
+ <widget class="QDialog" name="add_concert">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>341</width>
+    <height>558</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>520</y>
+     <width>201</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Добавить мероприятие</string>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>321</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Место:</string>
+   </property>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>301</width>
+      <height>111</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Континет:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Город:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Концерный зал:</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QComboBox" name="comboBox">
+         <item>
+          <property name="text">
+           <string>Африка</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Европа</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Азия</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Северная Америка</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Южная Америка</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Австралия</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Антарктида</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox_2">
+         <item>
+          <property name="text">
+           <string>Санкт-Петербург</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Петрозаводск</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>город</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>город</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>город</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox_3">
+         <item>
+          <property name="text">
+           <string>Космонавт</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Ледовый дворец</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Октябрьсктй</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Гигант-Холл</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Аврора</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>А2 Green Concert</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Clubzal</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Epicenter Concert Hall</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Freedom Music Hall</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>VNVNC Concert Hall</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Nautilus</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Synergy</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Mod</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Грибоедов</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Place</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Голубая устрица</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Ионотека</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_2">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>150</y>
+     <width>321</width>
+     <height>301</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Дата и время:</string>
+   </property>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>301</width>
+      <height>271</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <item>
+      <widget class="QCalendarWidget" name="calendarWidget"/>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Время: </string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTimeEdit" name="timeEdit"/>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="pushButton_2">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>520</y>
+     <width>121</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Отмена</string>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_3">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>450</y>
+     <width>321</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Информация о клубе:</string>
+   </property>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>301</width>
+      <height>44</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Вместимость:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Стоимость аренды:</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>1200</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string>20000 ₽/час</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
