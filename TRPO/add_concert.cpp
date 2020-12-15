@@ -1,0 +1,160 @@
+#include "add_concert.h"
+#include "ui_add_concert.h"
+#include <QMessageBox>
+#include <QtSql>
+
+add_concert::add_concert(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::add_concert)
+{
+    ui->setupUi(this);
+
+    //ui->city->setCurrentText("City");
+    QStringList cont = {"Aфрика","Европа","Азия","Северная Америка","Южная Америка","Австралия","Антарктида"};
+    ui->continent->addItems(cont);
+
+    QString curr_cont = ui->continent->currentText();
+    QSqlQuery query;
+    query.exec("SELECT DISTINCT City from concert_halls where continent like '%" + curr_cont + "%'");
+    while (query.next()) {
+             QString city = query.value(0).toString();
+             qDebug() << city;
+             ui->city->addItem(city);
+         }
+        //int a = ui->continent->currentIndex();
+        //ui->continent->
+    QString a = ui->continent->currentText();
+    connect(ui->continent,SIGNAL(currentIndexChanged(QString)),this,SLOT(on_continent_clicked()));// izmenenie commanbox
+    connect(ui->city,SIGNAL(currentIndexChanged(QString)),this,SLOT(on_city_clicked()));
+    connect(ui->club,SIGNAL(currentIndexChanged(QString)),this,SLOT(on_club_clicked()));
+
+
+    //ui->city->addItem("JEPPA");
+    ui->capacity->setText("1488_"); //+ QString::number(a)
+
+    ui->price->setText("228 ₽/час");
+    ui->date->setDateRange(QDate(2020, 12, 13),QDate(2020, 12, 25));
+
+    setWindowTitle("Добавление концерта");
+
+}
+
+add_concert::~add_concert()
+{
+    delete ui;
+}
+
+void add_concert::on_pushButton_2_clicked() //otmena
+{
+    this->close();
+    emit BackToMain();
+}
+
+void add_concert::on_pushButton_clicked()//add
+{
+   QString cont = ui->continent->currentText(),
+           city = ui->city->currentText(),
+           club = ui->club->currentText();
+   QSqlQuery query;
+   query.exec("SELECT hall_id from concert_halls where continent like '%" + cont + "%' and city like '%" + city + "%' and hall_name like '%" + club +"%'");
+   query.next();
+   QString club_id = query.value(0).toString();
+   qDebug() << club_id;
+   QString cap = ui->capacity->text();
+    QString band = "MyBand";
+    QString t_price ="1500";
+   int day = ui->date->selectedDate().day(),
+           month = ui->date->selectedDate().month(),
+           year = ui->date->selectedDate().year();
+   QString time = ui->time->text();
+   QString date_time = QString::number(year) + "-" + QString::number(month) + "-" + QString::number(day) + " " + time +":00";
+
+   //query.next();
+
+   query.exec("INSERT into new_concerts values ('" + date_time + "', "+ club_id + ", '"+ band + "',"+ t_price + ", "+ cap + ", "+ cap + ")"); //  '\''
+     //qDebug()<<"INSERT into new_concerts values ('" + date_time + "', "+ club_id + ", '"+ band + "',"+ t_price + ", "+ cap + ", "+ cap + ")";
+
+   //query.next();
+    //query.exec("INSERT INTO new_concerts VALUES ('2021-01-20 20:00:00', 1, 'MGK', 3000, 12300, 500)");
+
+    query.exec("SELECT concert_id from new_concerts where concert_date_time like '%" + date_time + "%' and musician like '%MyBand%'");
+    //qDebug()<<"SELECT concert_id from new_concerts where concert_date_time like to_date(createddate::TEXT,'"+ date_time +"') and musician like '%MyBand%'"; //'%" + date_time + "%'
+    query.next();
+
+    QString concert_id = query.value(0).toString();
+    //qDebug() << concert_id;
+
+   query.exec("INSERT into my_tour values (" + concert_id +")");
+
+
+   //int time = ui->time-> // get time
+//sql set concert
+
+    this->close();
+    emit BackToMain();
+}
+
+
+void add_concert::on_continent_clicked()
+{
+   ui->city->clear();
+   ui->club->clear();
+   QString a = ui->continent->currentText();
+   QString curr_cont = ui->continent->currentText();
+   QSqlQuery query;
+   query.exec("SELECT DISTINCT City from concert_halls where continent like '%" + curr_cont + "%'");
+   while (query.next()) {
+            QString city = query.value(0).toString();
+            qDebug() << city;
+            ui->city->addItem(city);
+        }
+   connect(ui->city,SIGNAL(currentIndexChanged(QString)),this,SLOT(on_city_clicked()));
+}
+
+
+void add_concert::on_city_clicked()
+{
+    ui->club->clear();
+    QString curr_city = ui->city->currentText();
+    QString curr_cont = ui->continent->currentText();
+    QSqlQuery query;
+    query.exec("SELECT hall_name from concert_halls where city like '%" + curr_city + "%'");
+    while (query.next()) {
+             QString club = query.value(0).toString();
+             qDebug() << club;
+             ui->club->addItem(club);
+         }
+}
+
+void add_concert::on_club_clicked()
+{
+    QString curr_cont = ui->continent->currentText();
+    QString curr_city = ui->city->currentText();
+    QString curr_club = ui->club->currentText();
+    QSqlQuery query;
+
+    query.exec("SELECT * from concert_halls where continent like '%" + curr_cont + "%' and city like '%" + curr_city + "%' and hall_name like '%" + curr_club +"%'");
+
+
+   // query.exec("SELECT * from new_concerts where hall_id = 3 and clock_timestamp() < concert_date_time");
+
+
+    ui->date->setDateRange(QDate(2020, 12, 1),QDate(2020, 12, 29));
+
+    query.next();
+    ui->adress->setText(query.value(3).toString());
+    ui->price->setText(query.value(5).toString() + " ₽/час");
+    ui->capacity->setText(query.value(6).toString());
+    ui->website->setText(query.value(7).toString());
+    ui->director->setText(query.value(8).toString());
+    ui->number->setText(query.value(9).toString());
+
+
+}
+
+void add_concert::on_date_clicked(const QDate &date)
+{
+    QString a = date.toString();
+   // ui->capacity->setText("1488 "+ a);
+    //ui->capacity->repaint();
+}
