@@ -39,7 +39,7 @@ void info::on_band_clicked()
     ui->t_sold->setText(query.value(1).toString());
     ui->t_days->setText(query.value(2).toString());
     ui->t_concerts->setText(query.value(3).toString());
-    ui->t_price->setText(query.value(4).toString());
+    ui->t_price->setText(query.value(4).toString() + "₽");
 }
 
 info::~info()

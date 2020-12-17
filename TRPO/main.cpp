@@ -4,6 +4,8 @@
 #include <iostream>
 #include <QApplication>
 #include <QtSql>
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
 
 
 bool init_db() {
@@ -28,4 +30,15 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
     return a.exec();
+
+
+    /*
+    QGuiApplication app(argc, argv);
+
+    QQmlApplicationEngine engine;
+    engine.load(QUrl(QStringLiteral("qrc:/myqml.qml")));
+
+
+    return app.exec();
+    */
 }

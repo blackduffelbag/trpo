@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>958</width>
-    <height>589</height>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -44,7 +44,7 @@
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>238</width>
+       <width>251</width>
        <height>116</height>
       </rect>
      </property>
@@ -54,7 +54,7 @@
         <item>
          <widget class="QLabel" name="label_17">
           <property name="text">
-           <string>Количесвто выступлений:</string>
+           <string>Всего выступлений:    </string>
           </property>
          </widget>
         </item>
@@ -91,35 +91,35 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QLabel" name="label">
+         <widget class="QLabel" name="concerts">
           <property name="text">
            <string/>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label_2">
+         <widget class="QLabel" name="distance">
           <property name="text">
            <string/>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label_3">
+         <widget class="QLabel" name="days">
           <property name="text">
            <string/>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label_4">
+         <widget class="QLabel" name="cost">
           <property name="text">
            <string/>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label_7">
+         <widget class="QLabel" name="procide">
           <property name="text">
            <string/>
           </property>
@@ -142,28 +142,28 @@
     <property name="title">
      <string>Концерты:</string>
     </property>
-    <widget class="QScrollArea" name="scrollArea">
+    <widget class="QListWidget" name="tour">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>30</y>
+       <y>21</y>
        <width>241</width>
-       <height>331</height>
+       <height>321</height>
       </rect>
      </property>
-     <property name="widgetResizable">
-      <bool>true</bool>
+    </widget>
+    <widget class="QPushButton" name="delete_">
+     <property name="geometry">
+      <rect>
+       <x>11</x>
+       <y>340</y>
+       <width>241</width>
+       <height>32</height>
+      </rect>
      </property>
-     <widget class="QWidget" name="scrollContents">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>239</width>
-        <height>329</height>
-       </rect>
-      </property>
-     </widget>
+     <property name="text">
+      <string>Delete</string>
+     </property>
     </widget>
    </widget>
    <widget class="QPushButton" name="pushButton_2">
@@ -210,7 +210,7 @@
        <x>9</x>
        <y>29</y>
        <width>651</width>
-       <height>461</height>
+       <height>471</height>
       </rect>
      </property>
      <property name="resizeMode">

@@ -21,11 +21,11 @@ signals:
 private slots:
     void on_city_clicked();
 
-    void on_date_clicked();
-
     void on_pushButton_clicked();
 
     void on_pushButton_2_clicked();
+
+    void on_date_clicked();
 
 private:
     Ui::buy_tickets *ui;

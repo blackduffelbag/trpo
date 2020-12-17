@@ -10,6 +10,7 @@
 #include "info.h"
 
 
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -21,6 +22,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    inline void update_tour();
 
 private slots:
     void on_pushButton_clicked();
@@ -29,7 +31,11 @@ private slots:
 
     void on_pushButton_3_clicked();
 
+    void on_tour_clicked();
+
     //void on_verticalScrollBar_actionTriggered(int action);
+
+    void on_delete__clicked();
 
 private:
     Ui::MainWindow *ui;

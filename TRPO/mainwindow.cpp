@@ -6,8 +6,12 @@
 #include "buy_tickets.h"
 #include <QVBoxLayout>
 
+#include "check.h"
+
 #include <QtSql>
 
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
 
 #include <QGraphicsScene>
 #include <QGraphicsObject>
@@ -29,91 +33,103 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    //QPixmap pix("/Users/blackduffelbag/Desktop/kurs/map/map.jpg");
-   // int w = ui->label_map->width();
-    //int h = ui->label_map->height();
-
-    //ui->label_map->setPixmap(pix.scaled(w,h, Qt::KeepAspectRatio));
-    //ui->label_map->setPixmap(pix);
     setWindowTitle("Ваш тур");
-    ui->label->setText("12");
 
-    ui->label_2->setText("4936 км");
 
-    ui->label_3->setText("15");
-
-    ui->label_4->setText("1400000₽");
-
-    ui->label_7->setText("20400000₽");
+    QSqlQuery query;
+    query.exec("SELECT X.concert_date_time, concert_halls.city, concert_halls.hall_name from my_tour JOIN new_concerts as X on my_tour.concert_id = X.concert_id JOIN concert_halls on X.hall_id = concert_halls.hall_id ORDER BY X.concert_date_time");
+        while (query.next()) {
+    ui->tour->addItem(query.value(1).toString() + ", " + query.value(2).toString());
+        }
 
 
 
-    QVBoxLayout * lay = new QVBoxLayout();
+    query.exec("SELECT count(my_tour) , sum(concert_halls.rent_price) , sum(concert_halls.capacity) from my_tour JOIN new_concerts as X on my_tour.concert_id = X.concert_id JOIN concert_halls on X.hall_id = concert_halls.hall_id");
+    query.next();
+    ui->concerts->setText(query.value(0).toString());
 
-        QLabel *label = new QLabel("Dynamo, Zürich, Switzerland");
-        lay->addWidget(label);
-        QLabel *label1 = new QLabel("Magazzini Generali, Milan, Italy");
-        lay->addWidget(label1);
-        QLabel *label2 = new QLabel("Grelle Forelle, Vienna, Austria");
-        lay->addWidget(label2);
-        QLabel *label3 = new QLabel("Dürer Kert, Budapest, Hungary");
-        lay->addWidget(label3);
-        QLabel *label4 = new QLabel("MeetFactory, Prague, Czech Republic");
-        lay->addWidget(label4);
-        QLabel *label5 = new QLabel("Proxima, Warsaw, Poland");
-        lay->addWidget(label5);
-        QLabel *label6 = new QLabel("Musik & Frieden, Berlin, Germany");
-        lay->addWidget(label6);
-        QLabel *label7 = new QLabel("Uebel & Gefährlich, Hamburg, Germany");
-        lay->addWidget(label7);
-        QLabel *label8 = new QLabel("VEGA, Copenhagen, Denmark");
-        lay->addWidget(label8);
-        QLabel *label9 = new QLabel("Nalen Klubb, Stockholm, Sweden");
-        lay->addWidget(label9);
-        QLabel *label10 = new QLabel("Clubzal, St. Petersburg, Russian Federation");
-        lay->addWidget(label10);
-        QLabel *label11 = new QLabel("Aglomerat, Moscow, Russian Federation");
-        lay->addWidget(label11);
+    ui->distance->setText("1488 км");
+    int d = query.value(0).toInt() * 1.8;
+    ui->days->setText(QString::number(d));
 
+    ui->cost->setText(query.value(1).toString() + "₽");
+    int p = query.value(2).toInt() * 1500;// 1500 - ticket cost
+    ui->procide->setText(QString::number(p) + "₽");
 
+    ui->quickWidget->setSource(QUrl("qrc:/myqml.qml"));
 
-    ui->scrollContents->setLayout(lay);
+    QObject *pRoot = (QObject*)ui->quickWidget->rootObject();
+    if(pRoot != NULL)
+    {
+        connect(ui->delete_, SIGNAL(clicked(bool)), pRoot, SIGNAL(go_to_city()));
+    }
 
+    query.exec("SELECT count(my_tour) from my_tour JOIN new_concerts as X on my_tour.concert_id = X.concert_id JOIN concert_halls on X.hall_id = concert_halls.hall_id");
+    query.next();
+    int count = query.value(0).toInt();
 
-   // ui->quickWidget->rootContext()->setContextProperty("w", this);
-   // ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/ myqml.qml")));
+    //QObject *pRoot = (QObject*)ui->quickWidget->rootObject();
 
+    QVariantList list;
+    query.exec("SELECT C.XY_coor from my_tour JOIN new_concerts as X on my_tour.concert_id = X.concert_id JOIN concert_halls on X.hall_id = concert_halls.hall_id JOIN Coordinates_of_cities as C on concert_halls.City = C.City ORDER BY X.concert_date_time");
+    while (query.next()){
+    QString x = query.value(0).toString();
+    QString y = query.value(0).toString();
+    x.chop(x.length() - x.indexOf(","));
+    y.remove(x + ",");
+    x.toDouble();
+    y.toDouble();
+    list << x << y;
+    }
 
-    //scene = new QGraphicsScene();
-    //ui->GraphicsScene->setScene(scene);
+    qDebug()<<list;
 
-    /*
-    //QGraphicsScene* scene = myExistingGraphicsScene();
-    QGraphicsScene* scene = new QGraphicsScene();
-    QQmlEngine *engine = new QQmlEngine;
-    QQmlComponent component(engine, QUrl::fromLocalFile("map.qml"));
-    QGraphicsObject *object =
-        qobject_cast<QGraphicsObject *>(component.create());
-    scene->addItem(object);
-    */
+    //for (int i=0; i<list.length(); i=i+2)
+    //{
+    //qDebug()<<list[i]<<list[i+1];
+    //}
 
-
-    /*
-    QQuickView *qmlView = new QQuickView;
-     qmlView->setSource(QUrl::fromLocalFile("map.qml"));
-
-     QWidget *widget = myExistingWidget();
-     QVBoxLayout *layout = new QVBoxLayout(widget);
-     layout->addWidget(qmlView);
-     */
-
+    QMetaObject::invokeMethod(pRoot, "add_road",
+            Q_ARG(QVariant, QVariant::fromValue(list)));
 
 
 }
 
+
+
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_tour_clicked()
+{
+    QString tour =ui->tour->currentItem()->text();
+    //qDebug()<<tour.indexOf(",");
+    tour.chop(tour.length() - tour.indexOf(","));
+    //qDebug()<<tour;
+
+    QObject *pRoot = (QObject*)ui->quickWidget->rootObject();
+
+    QVariantList list;
+
+    QSqlQuery query;
+
+    query.exec("SELECT xy_coor from coordinates_of_cities where city like '%" + tour + "%'");
+    query.next();
+    //sql get cord where city
+    QString x = query.value(0).toString();
+    QString y = query.value(0).toString();
+    x.chop(x.length() - x.indexOf(","));
+    y.remove(x + ",");
+    x.toDouble();
+    y.toDouble();
+    list << x << y;
+    qDebug()<<list;
+    QMetaObject::invokeMethod(pRoot, "to_city",
+            Q_ARG(QVariant, QVariant::fromValue(list)));
+
+
 }
 
 void MainWindow::on_pushButton_clicked()  //плюсик
@@ -123,12 +139,59 @@ void MainWindow::on_pushButton_clicked()  //плюсик
     win.setModal(true);
     win.exec();
 
+    ui->tour->clear();
+    QSqlQuery query;
+    query.exec("SELECT X.concert_date_time, concert_halls.city, concert_halls.hall_name from my_tour JOIN new_concerts as X on my_tour.concert_id = X.concert_id JOIN concert_halls on X.hall_id = concert_halls.hall_id ORDER BY X.concert_date_time");
+        while (query.next()) {
+    ui->tour->addItem(query.value(1).toString() + ", " + query.value(2).toString());
+        }
+
+        query.exec("SELECT count(my_tour) from my_tour JOIN new_concerts as X on my_tour.concert_id = X.concert_id JOIN concert_halls on X.hall_id = concert_halls.hall_id");
+        query.next();
+        int count = query.value(0).toInt();
+
+        QObject *pRoot = (QObject*)ui->quickWidget->rootObject();
+
+        QVariantList list;
+        query.exec("SELECT C.XY_coor from my_tour JOIN new_concerts as X on my_tour.concert_id = X.concert_id JOIN concert_halls on X.hall_id = concert_halls.hall_id JOIN Coordinates_of_cities as C on concert_halls.City = C.City ORDER BY X.concert_date_time");
+        while (query.next()){
+        QString x = query.value(0).toString();
+        QString y = query.value(0).toString();
+        x.chop(x.length() - x.indexOf(","));
+        y.remove(x + ",");
+        x.toDouble();
+        y.toDouble();
+        list << x << y;
+        }
+
+        qDebug()<<list;
+
+        //for (int i=0; i<list.length(); i=i+2)
+        //{
+        //qDebug()<<list[i]<<list[i+1];
+        //}
+
+        QMetaObject::invokeMethod(pRoot, "add_road",
+                Q_ARG(QVariant, QVariant::fromValue(list)));
 
     /*
-    hide();
-    add = new add_concert(this);
-    add->show();
+    QVBoxLayout * lay = new QVBoxLayout();
+    QSqlQuery query;
+    query.exec("SELECT X.concert_date_time, concert_halls.city, concert_halls.hall_name from my_tour JOIN new_concerts as X on my_tour.concert_id = X.concert_id JOIN concert_halls on X.hall_id = concert_halls.hall_id ORDER BY X.concert_date_time");
+        while (query.next()) {
+    QLabel *label = new QLabel(query.value(1).toString() + ", " + query.value(2).toString());
+        lay->addWidget(label);
+        }
+
+    ui->scrollContents->setLayout(lay);
+    qDebug()<<"func";
     */
+
+   //hide();
+   //add = new add_concert(this);
+   //add->show();
+   //connect(add, SIGNAL(signalReady()), this, SLOT(slotUpdateModels()));
+
 }
 
 
@@ -164,3 +227,53 @@ void MainWindow::on_pushButton_3_clicked()
 }
 
 
+
+void MainWindow::on_delete__clicked()
+{
+
+    QString tour =ui->tour->currentItem()->text();
+    tour.chop(tour.length() - tour.indexOf(","));
+    qDebug()<<tour;
+
+    QSqlQuery query;
+    query.exec("Select new_concerts.concert_ID from new_concerts join concert_halls ch on new_concerts.hall_id = ch.hall_id where Musician like '%MyBand%' and city like '%" + tour + "%'");
+    query.next();
+    QString concert_id = query.value(0).toString() ;
+    qDebug()<<concert_id;
+    query.exec("Delete from new_concerts where concert_ID = " + concert_id);
+    query.exec("Delete from my_tour where concert_ID = " + concert_id);
+
+    ui->tour->clear();
+    query.exec("SELECT X.concert_date_time, concert_halls.city, concert_halls.hall_name from my_tour JOIN new_concerts as X on my_tour.concert_id = X.concert_id JOIN concert_halls on X.hall_id = concert_halls.hall_id ORDER BY X.concert_date_time");
+        while (query.next()) {
+    ui->tour->addItem(query.value(1).toString() + ", " + query.value(2).toString());
+        }
+
+        QObject *pRoot = (QObject*)ui->quickWidget->rootObject();
+
+        QVariantList list;
+        query.exec("SELECT C.XY_coor from my_tour JOIN new_concerts as X on my_tour.concert_id = X.concert_id JOIN concert_halls on X.hall_id = concert_halls.hall_id JOIN Coordinates_of_cities as C on concert_halls.City = C.City ORDER BY X.concert_date_time");
+        while (query.next()){
+        QString x = query.value(0).toString();
+        QString y = query.value(0).toString();
+        x.chop(x.length() - x.indexOf(","));
+        y.remove(x + ",");
+        x.toDouble();
+        y.toDouble();
+        list << x << y;
+        }
+
+        qDebug()<<list;
+
+        //for (int i=0; i<list.length(); i=i+2)
+        //{
+        //qDebug()<<list[i]<<list[i+1];
+        //}
+
+        QMetaObject::invokeMethod(pRoot, "add_road",
+                Q_ARG(QVariant, QVariant::fromValue(list)));
+
+
+
+
+}
