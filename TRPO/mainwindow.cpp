@@ -6,7 +6,7 @@
 #include "buy_tickets.h"
 #include <QVBoxLayout>
 
-#include "check.h"
+#include <QThread>
 
 #include <QtSql>
 
@@ -18,7 +18,7 @@
 #include <QObject>
 #include <QQmlContext>
 
- //#include <QDeclarativeEngine>
+//#include <QDeclarativeEngine>
 //#include <QQuickView>
 
 #include <QtQml/QQmlComponent>
@@ -174,6 +174,20 @@ void MainWindow::on_pushButton_clicked()  //плюсик
         QMetaObject::invokeMethod(pRoot, "add_road",
                 Q_ARG(QVariant, QVariant::fromValue(list)));
 
+
+        query.exec("SELECT count(my_tour) , sum(concert_halls.rent_price) , sum(concert_halls.capacity) from my_tour JOIN new_concerts as X on my_tour.concert_id = X.concert_id JOIN concert_halls on X.hall_id = concert_halls.hall_id");
+        query.next();
+        ui->concerts->setText(query.value(0).toString());
+
+        ui->distance->setText("1488 км");
+        int d = query.value(0).toInt() * 1.8;
+        ui->days->setText(QString::number(d));
+
+        ui->cost->setText(query.value(1).toString() + "₽");
+        int p = query.value(2).toInt() * 1500;// 1500 - ticket cost
+        ui->procide->setText(QString::number(p) + "₽");
+
+
     /*
     QVBoxLayout * lay = new QVBoxLayout();
     QSqlQuery query;
@@ -230,7 +244,8 @@ void MainWindow::on_pushButton_3_clicked()
 
 void MainWindow::on_delete__clicked()
 {
-
+    if(ui->tour->count() > 0)
+    {
     QString tour =ui->tour->currentItem()->text();
     tour.chop(tour.length() - tour.indexOf(","));
     qDebug()<<tour;
@@ -243,11 +258,15 @@ void MainWindow::on_delete__clicked()
     query.exec("Delete from new_concerts where concert_ID = " + concert_id);
     query.exec("Delete from my_tour where concert_ID = " + concert_id);
 
+
     ui->tour->clear();
     query.exec("SELECT X.concert_date_time, concert_halls.city, concert_halls.hall_name from my_tour JOIN new_concerts as X on my_tour.concert_id = X.concert_id JOIN concert_halls on X.hall_id = concert_halls.hall_id ORDER BY X.concert_date_time");
         while (query.next()) {
     ui->tour->addItem(query.value(1).toString() + ", " + query.value(2).toString());
         }
+
+
+        //QThread::sleep(5);
 
         QObject *pRoot = (QObject*)ui->quickWidget->rootObject();
 
@@ -272,6 +291,21 @@ void MainWindow::on_delete__clicked()
 
         QMetaObject::invokeMethod(pRoot, "add_road",
                 Q_ARG(QVariant, QVariant::fromValue(list)));
+
+
+        query.exec("SELECT count(my_tour) , sum(concert_halls.rent_price) , sum(concert_halls.capacity) from my_tour JOIN new_concerts as X on my_tour.concert_id = X.concert_id JOIN concert_halls on X.hall_id = concert_halls.hall_id");
+        query.next();
+        ui->concerts->setText(query.value(0).toString());
+
+        ui->distance->setText("1488 км");
+        int d = query.value(0).toInt() * 1.8;
+        ui->days->setText(QString::number(d));
+
+        ui->cost->setText(query.value(1).toString() + "₽");
+        int p = query.value(2).toInt() * 1500;// 1500 - ticket cost
+        ui->procide->setText(QString::number(p) + "₽");
+
+    }
 
 
 

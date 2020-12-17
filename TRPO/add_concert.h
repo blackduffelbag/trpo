@@ -31,7 +31,7 @@ private slots:
 
     void on_club_clicked();
 
-    void on_date_clicked(const QDate &date);
+    int on_date_clicked();
 
 private:
     Ui::add_concert *ui;
