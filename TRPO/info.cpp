@@ -9,15 +9,6 @@ info::info(QWidget *parent) :
     ui->setupUi(this);
 
     setWindowTitle("Информация");
-
-   //ui->label_6->setText("15463");
-
-  // ui->label_8->setText("15");
-
-  // ui->label_7->setText("12");
-
-   //ui->label_5->setText("1300 ₽-3500 ₽");
-
    ui->band->clear();
    QSqlQuery query;
    query.exec("SELECT DISTINCT musician from info_about_musicians");
@@ -32,7 +23,6 @@ info::info(QWidget *parent) :
 void info::on_band_clicked()
 {
     QString band =ui->band->currentItem()->text();
-    //qDebug()<<band;
     QSqlQuery query;
     query.exec("SELECT * from info_about_musicians where musician like'%" + band +"%'");
     query.next();
